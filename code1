@@ -1,0 +1,1151 @@
+from scipy import stats
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+data = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Pre-Grad'].to_numpy().flatten()
+method2 = data['echo_pre_MG'].to_numpy().flatten()
+
+# Calculate differences and means
+differences = method1 - method2
+means = (method1 + method2) / 2
+
+# Calculate the mean and standard deviation of the differences
+mean_diff = np.mean(differences)
+std_diff = np.std(differences, ddof=1)  # ddof=1 provides the sample standard deviation
+
+# Calculate the 95% confidence intervals for the limits of agreement
+n = len(differences)
+z = 1.96  # Z-score for 95% confidence
+SE = std_diff / np.sqrt(2 * n)
+LOA_upper = mean_diff + z * std_diff
+LOA_lower = mean_diff - z * std_diff
+
+# Calculate the 95% confidence interval for the mean difference (bias)
+bias_ci_lower, bias_ci_upper = stats.t.interval(0.95, len(differences)-1, loc=mean_diff, scale=stats.sem(differences))
+
+# Plot Bland-Altman plot
+plt.figure(figsize=(10, 6))  # Set the figure size as needed
+plt.scatter(means, differences, alpha=0.5)
+plt.axhline(y=mean_diff, color='blue', linestyle='--', label=f'Mean diff: {mean_diff:.2f}')
+plt.axhline(y=LOA_upper, color='red', linestyle='--', label=f'Upper LoA: {LOA_upper:.2f}')
+plt.axhline(y=LOA_lower, color='red', linestyle='--', label=f'Lower LoA: {LOA_lower:.2f}')
+
+# Fill the confidence intervals on the plot
+plt.fill_between([min(means), max(means)], bias_ci_upper, bias_ci_upper, color='red', alpha=0.2, label='LoA CI')
+plt.fill_between([min(means), max(means)], bias_ci_lower, bias_ci_lower, color='red', alpha=0.2)
+
+# Annotations for bias and LoA with CI
+plt.text(max(means), mean_diff, f'  Bias: {mean_diff:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_upper, f'  Upper LoA: {LOA_upper:.2f} (95% CI {bias_ci_upper:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_lower, f'  Lower LoA: {LOA_lower:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_lower:.2f})', verticalalignment='top', horizontalalignment='right')
+
+# Set the title with the specified text
+plt.title('Bland-Altman plot: Agreement between Invasive and ECHO - Pre-TAVR Mean Gradient')
+plt.xlabel('Means of Methods')
+plt.ylabel('Differences between Methods')
+plt.legend()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/bland_altman_plot_1.jpg', format='jpg', dpi=600)
+
+# Display the plot
+plt.show()
+
+# Print the bias and LoA with confidence intervals
+print(f"Bias (mean difference): {mean_diff:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_upper:.2f})")
+print(f"Upper LoA: {LOA_upper:.2f} with 95% CI ({bias_ci_upper:.2f}, {bias_ci_upper:.2f})")
+print(f"Lower LoA: {LOA_lower:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_lower:.2f})")
+
+
+from scipy import stats
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+data = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Post-Grad'].to_numpy().flatten()
+method2 = data['echo_post_MG'].to_numpy().flatten()
+
+# Calculate differences and means
+differences = method1 - method2
+means = (method1 + method2) / 2
+
+# Calculate the mean and standard deviation of the differences
+mean_diff = np.mean(differences)
+std_diff = np.std(differences, ddof=1)  # ddof=1 provides the sample standard deviation
+
+# Calculate the 95% confidence intervals for the limits of agreement
+n = len(differences)
+z = 1.96  # Z-score for 95% confidence
+SE = std_diff / np.sqrt(2 * n)
+LOA_upper = mean_diff + z * std_diff
+LOA_lower = mean_diff - z * std_diff
+
+# Calculate the 95% confidence interval for the mean difference (bias)
+bias_ci_lower, bias_ci_upper = stats.t.interval(0.95, len(differences)-1, loc=mean_diff, scale=stats.sem(differences))
+
+# Plot Bland-Altman plot
+plt.figure(figsize=(10, 6))  # Set the figure size as needed
+plt.scatter(means, differences, alpha=0.5)
+plt.axhline(y=mean_diff, color='blue', linestyle='--', label=f'Mean diff: {mean_diff:.2f}')
+plt.axhline(y=LOA_upper, color='red', linestyle='--', label=f'Upper LoA: {LOA_upper:.2f}')
+plt.axhline(y=LOA_lower, color='red', linestyle='--', label=f'Lower LoA: {LOA_lower:.2f}')
+
+# Fill the confidence intervals on the plot
+plt.fill_between([min(means), max(means)], bias_ci_upper, bias_ci_upper, color='red', alpha=0.2, label='LoA CI')
+plt.fill_between([min(means), max(means)], bias_ci_lower, bias_ci_lower, color='red', alpha=0.2)
+
+# Annotations for bias and LoA with CI
+plt.text(max(means), mean_diff, f'  Bias: {mean_diff:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_upper, f'  Upper LoA: {LOA_upper:.2f} (95% CI {bias_ci_upper:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_lower, f'  Lower LoA: {LOA_lower:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_lower:.2f})', verticalalignment='top', horizontalalignment='right')
+
+# Set the title with the specified text
+plt.title('Bland-Altman plot: Agreement between Invasive and ECHO - Post-TAVR Mean Gradient')
+plt.xlabel('Means of Methods')
+plt.ylabel('Differences between Methods')
+plt.legend()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/bland_altman_plot_2.jpg', format='jpg', dpi=600)
+
+# Display the plot
+plt.show()
+
+# Print the bias and LoA with confidence intervals
+print(f"Bias (mean difference): {mean_diff:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_upper:.2f})")
+print(f"Upper LoA: {LOA_upper:.2f} with 95% CI ({bias_ci_upper:.2f}, {bias_ci_upper:.2f})")
+print(f"Lower LoA: {LOA_lower:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_lower:.2f})")
+
+
+from scipy import stats
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 1
+data = df[df['Group'] == 1]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Pre-Grad'].to_numpy().flatten()
+method2 = data['echo_pre_MG'].to_numpy().flatten()
+
+# Calculate differences and means
+differences = method1 - method2
+means = (method1 + method2) / 2
+
+# Calculate the mean and standard deviation of the differences
+mean_diff = np.mean(differences)
+std_diff = np.std(differences, ddof=1)  # ddof=1 provides the sample standard deviation
+
+# Calculate the 95% confidence intervals for the limits of agreement
+n = len(differences)
+z = 1.96  # Z-score for 95% confidence
+SE = std_diff / np.sqrt(2 * n)
+LOA_upper = mean_diff + z * std_diff
+LOA_lower = mean_diff - z * std_diff
+
+# Calculate the 95% confidence interval for the mean difference (bias)
+bias_ci_lower, bias_ci_upper = stats.t.interval(0.95, len(differences)-1, loc=mean_diff, scale=stats.sem(differences))
+
+# Plot Bland-Altman plot
+plt.figure(figsize=(10, 6))  # Set the figure size as needed
+plt.scatter(means, differences, alpha=0.5)
+plt.axhline(y=mean_diff, color='blue', linestyle='--', label=f'Mean diff: {mean_diff:.2f}')
+plt.axhline(y=LOA_upper, color='red', linestyle='--', label=f'Upper LoA: {LOA_upper:.2f}')
+plt.axhline(y=LOA_lower, color='red', linestyle='--', label=f'Lower LoA: {LOA_lower:.2f}')
+
+# Fill the confidence intervals on the plot
+plt.fill_between([min(means), max(means)], bias_ci_upper, bias_ci_upper, color='red', alpha=0.2, label='LoA CI')
+plt.fill_between([min(means), max(means)], bias_ci_lower, bias_ci_lower, color='red', alpha=0.2)
+
+# Annotations for bias and LoA with CI
+plt.text(max(means), mean_diff, f'  Bias: {mean_diff:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_upper, f'  Upper LoA: {LOA_upper:.2f} (95% CI {bias_ci_upper:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_lower, f'  Lower LoA: {LOA_lower:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_lower:.2f})', verticalalignment='top', horizontalalignment='right')
+
+# Set the title with the specified text
+plt.title('Bland-Altman plot: Agreement between Invasive and ECHO - Pre-TAVR Mean Gradient in LFLG patients')
+plt.xlabel('Means of Methods')
+plt.ylabel('Differences between Methods')
+plt.legend()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/bland_altman_plot_3.jpg', format='jpg', dpi=600)
+
+# Display the plot
+plt.show()
+
+# Print the bias and LoA with confidence intervals
+print(f"Bias (mean difference): {mean_diff:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_upper:.2f})")
+print(f"Upper LoA: {LOA_upper:.2f} with 95% CI ({bias_ci_upper:.2f}, {bias_ci_upper:.2f})")
+print(f"Lower LoA: {LOA_lower:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_lower:.2f})")
+
+from scipy import stats
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 1
+data = df[df['Group'] == 2]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Pre-Grad'].to_numpy().flatten()
+method2 = data['echo_pre_MG'].to_numpy().flatten()
+
+# Calculate differences and means
+differences = method1 - method2
+means = (method1 + method2) / 2
+
+# Calculate the mean and standard deviation of the differences
+mean_diff = np.mean(differences)
+std_diff = np.std(differences, ddof=1)  # ddof=1 provides the sample standard deviation
+
+# Calculate the 95% confidence intervals for the limits of agreement
+n = len(differences)
+z = 1.96  # Z-score for 95% confidence
+SE = std_diff / np.sqrt(2 * n)
+LOA_upper = mean_diff + z * std_diff
+LOA_lower = mean_diff - z * std_diff
+
+# Calculate the 95% confidence interval for the mean difference (bias)
+bias_ci_lower, bias_ci_upper = stats.t.interval(0.95, len(differences)-1, loc=mean_diff, scale=stats.sem(differences))
+
+# Plot Bland-Altman plot
+plt.figure(figsize=(10, 6))  # Set the figure size as needed
+plt.scatter(means, differences, alpha=0.5)
+plt.axhline(y=mean_diff, color='blue', linestyle='--', label=f'Mean diff: {mean_diff:.2f}')
+plt.axhline(y=LOA_upper, color='red', linestyle='--', label=f'Upper LoA: {LOA_upper:.2f}')
+plt.axhline(y=LOA_lower, color='red', linestyle='--', label=f'Lower LoA: {LOA_lower:.2f}')
+
+# Fill the confidence intervals on the plot
+plt.fill_between([min(means), max(means)], bias_ci_upper, bias_ci_upper, color='red', alpha=0.2, label='LoA CI')
+plt.fill_between([min(means), max(means)], bias_ci_lower, bias_ci_lower, color='red', alpha=0.2)
+
+# Annotations for bias and LoA with CI
+plt.text(max(means), mean_diff, f'  Bias: {mean_diff:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_upper, f'  Upper LoA: {LOA_upper:.2f} (95% CI {bias_ci_upper:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_lower, f'  Lower LoA: {LOA_lower:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_lower:.2f})', verticalalignment='top', horizontalalignment='right')
+
+# Set the title with the specified text
+plt.title('Bland-Altman plot: Agreement between Invasive and ECHO - Pre-TAVR Mean Gradient in NFLG patients')
+plt.xlabel('Means of Methods')
+plt.ylabel('Differences between Methods')
+plt.legend()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/bland_altman_plot_4.jpg', format='jpg', dpi=600)
+
+# Display the plot
+plt.show()
+
+# Print the bias and LoA with confidence intervals
+print(f"Bias (mean difference): {mean_diff:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_upper:.2f})")
+print(f"Upper LoA: {LOA_upper:.2f} with 95% CI ({bias_ci_upper:.2f}, {bias_ci_upper:.2f})")
+print(f"Lower LoA: {LOA_lower:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_lower:.2f})")
+
+from scipy import stats
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 2
+data = df[df['Group'] == 1]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Post-Grad'].to_numpy().flatten()
+method2 = data['echo_post_MG'].to_numpy().flatten()
+
+# Calculate differences and means
+differences = method1 - method2
+means = (method1 + method2) / 2
+
+# Calculate the mean and standard deviation of the differences
+mean_diff = np.mean(differences)
+std_diff = np.std(differences, ddof=1)  # ddof=1 provides the sample standard deviation
+
+# Calculate the 95% confidence intervals for the limits of agreement
+n = len(differences)
+z = 1.96  # Z-score for 95% confidence
+SE = std_diff / np.sqrt(2 * n)
+LOA_upper = mean_diff + z * std_diff
+LOA_lower = mean_diff - z * std_diff
+
+# Calculate the 95% confidence interval for the mean difference (bias)
+bias_ci_lower, bias_ci_upper = stats.t.interval(0.95, len(differences)-1, loc=mean_diff, scale=stats.sem(differences))
+
+# Plot Bland-Altman plot
+plt.figure(figsize=(10, 6))  # Set the figure size as needed
+plt.scatter(means, differences, alpha=0.5)
+plt.axhline(y=mean_diff, color='blue', linestyle='--', label=f'Mean diff: {mean_diff:.2f}')
+plt.axhline(y=LOA_upper, color='red', linestyle='--', label=f'Upper LoA: {LOA_upper:.2f}')
+plt.axhline(y=LOA_lower, color='red', linestyle='--', label=f'Lower LoA: {LOA_lower:.2f}')
+
+# Fill the confidence intervals on the plot
+plt.fill_between([min(means), max(means)], bias_ci_upper, bias_ci_upper, color='red', alpha=0.2, label='LoA CI')
+plt.fill_between([min(means), max(means)], bias_ci_lower, bias_ci_lower, color='red', alpha=0.2)
+
+# Annotations for bias and LoA with CI
+plt.text(max(means), mean_diff, f'  Bias: {mean_diff:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_upper, f'  Upper LoA: {LOA_upper:.2f} (95% CI {bias_ci_upper:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_lower, f'  Lower LoA: {LOA_lower:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_lower:.2f})', verticalalignment='top', horizontalalignment='right')
+
+# Set the title with the specified text
+plt.title('Bland-Altman plot: Agreement between Invasive and ECHO - Post-TAVR Mean Gradient in LFLG patients')
+plt.xlabel('Means of Methods')
+plt.ylabel('Differences between Methods')
+plt.legend()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/bland_altman_plot_5.jpg', format='jpg', dpi=600)
+
+# Display the plot
+plt.show()
+
+# Print the bias and LoA with confidence intervals
+print(f"Bias (mean difference): {mean_diff:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_upper:.2f})")
+print(f"Upper LoA: {LOA_upper:.2f} with 95% CI ({bias_ci_upper:.2f}, {bias_ci_upper:.2f})")
+print(f"Lower LoA: {LOA_lower:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_lower:.2f})")
+
+from scipy import stats
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 2
+data = df[df['Group'] == 2]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Post-Grad'].to_numpy().flatten()
+method2 = data['echo_post_MG'].to_numpy().flatten()
+
+# Calculate differences and means
+differences = method1 - method2
+means = (method1 + method2) / 2
+
+# Calculate the mean and standard deviation of the differences
+mean_diff = np.mean(differences)
+std_diff = np.std(differences, ddof=1)  # ddof=1 provides the sample standard deviation
+
+# Calculate the 95% confidence intervals for the limits of agreement
+n = len(differences)
+z = 1.96  # Z-score for 95% confidence
+SE = std_diff / np.sqrt(2 * n)
+LOA_upper = mean_diff + z * std_diff
+LOA_lower = mean_diff - z * std_diff
+
+# Calculate the 95% confidence interval for the mean difference (bias)
+bias_ci_lower, bias_ci_upper = stats.t.interval(0.95, len(differences)-1, loc=mean_diff, scale=stats.sem(differences))
+
+# Plot Bland-Altman plot
+plt.figure(figsize=(10, 6))  # Set the figure size as needed
+plt.scatter(means, differences, alpha=0.5)
+plt.axhline(y=mean_diff, color='blue', linestyle='--', label=f'Mean diff: {mean_diff:.2f}')
+plt.axhline(y=LOA_upper, color='red', linestyle='--', label=f'Upper LoA: {LOA_upper:.2f}')
+plt.axhline(y=LOA_lower, color='red', linestyle='--', label=f'Lower LoA: {LOA_lower:.2f}')
+
+# Fill the confidence intervals on the plot
+plt.fill_between([min(means), max(means)], bias_ci_upper, bias_ci_upper, color='red', alpha=0.2, label='LoA CI')
+plt.fill_between([min(means), max(means)], bias_ci_lower, bias_ci_lower, color='red', alpha=0.2)
+
+# Annotations for bias and LoA with CI
+plt.text(max(means), mean_diff, f'  Bias: {mean_diff:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_upper, f'  Upper LoA: {LOA_upper:.2f} (95% CI {bias_ci_upper:.2f} to {bias_ci_upper:.2f})', verticalalignment='bottom', horizontalalignment='right')
+plt.text(max(means), LOA_lower, f'  Lower LoA: {LOA_lower:.2f} (95% CI {bias_ci_lower:.2f} to {bias_ci_lower:.2f})', verticalalignment='top', horizontalalignment='right')
+
+# Set the title with the specified text
+plt.title('Bland-Altman plot: Agreement between Invasive and ECHO - Post-TAVR Mean Gradient in NFLG patients')
+plt.xlabel('Means of Methods')
+plt.ylabel('Differences between Methods')
+plt.legend()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/bland_altman_plot_6.jpg', format='jpg', dpi=600)
+
+# Display the plot
+plt.show()
+
+# Print the bias and LoA with confidence intervals
+print(f"Bias (mean difference): {mean_diff:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_upper:.2f})")
+print(f"Upper LoA: {LOA_upper:.2f} with 95% CI ({bias_ci_upper:.2f}, {bias_ci_upper:.2f})")
+print(f"Lower LoA: {LOA_lower:.2f} with 95% CI ({bias_ci_lower:.2f}, {bias_ci_lower:.2f})")
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Defining function for PB Regression 
+
+def passing_bablok(method1, method2):
+    """Perform Passing-Bablok analysis."""
+    #
+    # Calculate the gradients of the lines between each pair of points
+    #
+    n_points = len(method1)
+    # sv is a list of the gradients between of each pair of points
+    sv = []
+    # k is the number of gradients less than -1
+    k = 0
+    for i in range(n_points - 1):
+        for j in range(i + 1, n_points):
+            dy = method2[j] - method2[i]
+            dx = method1[j] - method1[i]
+            # Ignore gradients that are vertical (ie the x values of the points
+            # are the same)
+            if dx != 0:
+                gradient = dy / dx
+            elif dy < 0:
+                gradient = -1.e+23
+            elif dy > 0:
+                gradient = 1.e+23
+            else:
+                gradient = None
+            if gradient is not None:
+                sv.append(gradient)
+                k += (gradient < -1)
+    # Sort the gradients into ascending order
+    sv.sort()
+
+    #
+    # Find the estimated gradient and confidence limits
+    #
+    m0 = (len(sv) - 1) / 2
+    if m0 == int(m0):
+        # If odd
+        gradient_est = sv[k + int(m0)]
+    else:
+        # If even
+        gradient_est = 0.5 * (sv[k + int(m0 - 0.5)] + sv[k + int(m0 + 0.5)])
+    # Calculate the index of the upper and lower confidence bounds
+    w = 1.96
+    ci = w * math.sqrt((n_points * (n_points - 1) * (2 * n_points + 5)) / 18)
+    n_gradients = len(sv)
+    m1 = int(round((n_gradients - ci) / 2))
+    m2 = n_gradients - m1 - 1
+    # Calculate the lower and upper bounds of the gradient
+    (gradient_lb, gradient_ub) = (sv[k + m1], sv[k + m2])
+
+    def calc_intercept(method1, method2, gradient):
+        """Calculate intercept given points and a gradient."""
+        temp = []
+        for i in range(len(method1)):
+            temp.append(method2[i] - gradient * method1[i])
+        return np.median(temp)
+
+    # Calculate the intercept as the median of all the intercepts of all the
+    # lines connecting each pair of points
+    int_est = calc_intercept(method1, method2, gradient_est)
+    int_ub = calc_intercept(method1, method2, gradient_lb)
+    int_lb = calc_intercept(method1, method2, gradient_ub)
+
+    return (gradient_est, gradient_lb, gradient_ub), (int_est, int_lb, int_ub)
+
+# Load only the specific column from the Excel file
+method1 = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx', usecols=['inv_Pre-Grad']).to_numpy().flatten()
+method2 = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx', usecols=['echo_pre_MG']).to_numpy().flatten()
+
+# Perform Passing-Bablok regression
+beta, alpha = passing_bablok(method1, method2)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 10))  # Width of 10 inches and height of 2.5 inches
+ax.set_title('Passing-Bablok Regression: Pre TAVR Transvalvular Aortic Mean gradient')
+ax.set_xlabel('Pre TAVR Transvalvular Aortic Mean gradient- Invasive')
+ax.set_ylabel('Pre TAVR Transvalvular Aortic Mean gradient- ECHO')
+
+# Scatter plot
+ax.scatter(method1, method2, c='k', s=60, alpha=0.6, marker='o')
+
+# Determine the range for the reference line
+combined_range = np.concatenate((method1, method2))
+min_val = np.min(combined_range)
+max_val = np.max(combined_range)
+
+# Reference line
+label = 'Reference line'
+ax.plot([min_val, max_val], [min_val, max_val], c='grey', ls='--', label=label)
+
+# Passing-Bablok regression line
+x = np.array([min_val, max_val])
+y = beta[0] * x + alpha[0]
+ax.plot(x, y, label=f'{beta[0]:.2f}x + {alpha[0]:.2f}')
+
+# Passing-Bablok regression line - confidence intervals
+y_lb = beta[1] * x + alpha[1]
+y_ub = beta[2] * x + alpha[2]
+ax.plot(x, y_ub, c='tab:blue', alpha=0.2, label=f'Upper CI: {beta[2]:.2f}x + {alpha[2]:.2f}')
+ax.plot(x, y_lb, c='tab:blue', alpha=0.2, label=f'Lower CI: {beta[1]:.2f}x + {alpha[1]:.2f}')
+ax.fill_between(x, y_ub, y_lb, alpha=0.2)
+
+# Change axis limits to fit the data and reference line
+ax.set_xlim(min_val, max_val)
+ax.set_ylim(min_val, max_val)
+
+# Legend
+ax.legend(frameon=False)
+
+# Show
+plt.show()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/PB_plot_1.jpg', format='jpg', dpi=600)
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Defining function for PB Regression
+
+def passing_bablok(method1, method2):
+    """Perform Passing-Bablok analysis."""
+    #
+    # Calculate the gradients of the lines between each pair of points
+    #
+    n_points = len(method1)
+    # sv is a list of the gradients between of each pair of points
+    sv = []
+    # k is the number of gradients less than -1
+    k = 0
+    for i in range(n_points - 1):
+        for j in range(i + 1, n_points):
+            dy = method2[j] - method2[i]
+            dx = method1[j] - method1[i]
+            # Ignore gradients that are vertical (ie the x values of the points
+            # are the same)
+            if dx != 0:
+                gradient = dy / dx
+            elif dy < 0:
+                gradient = -1.e+23
+            elif dy > 0:
+                gradient = 1.e+23
+            else:
+                gradient = None
+            if gradient is not None:
+                sv.append(gradient)
+                k += (gradient < -1)
+    # Sort the gradients into ascending order
+    sv.sort()
+
+    #
+    # Find the estimated gradient and confidence limits
+    #
+    m0 = (len(sv) - 1) / 2
+    if m0 == int(m0):
+        # If odd
+        gradient_est = sv[k + int(m0)]
+    else:
+        # If even
+        gradient_est = 0.5 * (sv[k + int(m0 - 0.5)] + sv[k + int(m0 + 0.5)])
+    # Calculate the index of the upper and lower confidence bounds
+    w = 1.96
+    ci = w * math.sqrt((n_points * (n_points - 1) * (2 * n_points + 5)) / 18)
+    n_gradients = len(sv)
+    m1 = int(round((n_gradients - ci) / 2))
+    m2 = n_gradients - m1 - 1
+    # Calculate the lower and upper bounds of the gradient
+    (gradient_lb, gradient_ub) = (sv[k + m1], sv[k + m2])
+
+    def calc_intercept(method1, method2, gradient):
+        """Calculate intercept given points and a gradient."""
+        temp = []
+        for i in range(len(method1)):
+            temp.append(method2[i] - gradient * method1[i])
+        return np.median(temp)
+
+    # Calculate the intercept as the median of all the intercepts of all the
+    # lines connecting each pair of points
+    int_est = calc_intercept(method1, method2, gradient_est)
+    int_ub = calc_intercept(method1, method2, gradient_lb)
+    int_lb = calc_intercept(method1, method2, gradient_ub)
+
+    return (gradient_est, gradient_lb, gradient_ub), (int_est, int_lb, int_ub)
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+data = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Post-Grad'].to_numpy().flatten()
+method2 = data['echo_post_MG'].to_numpy().flatten()
+
+# Perform Passing-Bablok regression
+beta, alpha = passing_bablok(method1, method2)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 10))  # Width of 10 inches and height of 2.5 inches
+ax.set_title('Passing-Bablok Regression: Post TAVR Transvalvular Aortic Mean gradient')
+ax.set_xlabel('Post TAVR Transvalvular Aortic Mean gradient- Invasive')
+ax.set_ylabel('Post TAVR Transvalvular Aortic Mean gradient- ECHO')
+
+# Scatter plot
+ax.scatter(method1, method2, c='k', s=60, alpha=0.6, marker='o')
+
+# Determine the range for the reference line
+combined_range = np.concatenate((method1, method2))
+min_val = np.min(combined_range)
+max_val = np.max(combined_range)
+
+# Reference line
+label = 'Reference line'
+ax.plot([min_val, max_val], [min_val, max_val], c='grey', ls='--', label=label)
+
+# Passing-Bablok regression line
+x = np.array([min_val, max_val])
+y = beta[0] * x + alpha[0]
+ax.plot(x, y, label=f'{beta[0]:.2f}x + {alpha[0]:.2f}')
+
+# Passing-Bablok regression line - confidence intervals
+y_lb = beta[1] * x + alpha[1]
+y_ub = beta[2] * x + alpha[2]
+ax.plot(x, y_ub, c='tab:blue', alpha=0.2, label=f'Upper CI: {beta[2]:.2f}x + {alpha[2]:.2f}')
+ax.plot(x, y_lb, c='tab:blue', alpha=0.2, label=f'Lower CI: {beta[1]:.2f}x + {alpha[1]:.2f}')
+ax.fill_between(x, y_ub, y_lb, alpha=0.2)
+
+# Change axis limits to fit the data and reference line
+ax.set_xlim(min_val, max_val)
+ax.set_ylim(min_val, max_val)
+
+# Legend
+ax.legend(frameon=False)
+
+# Show
+plt.show()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/PB_plot_2.jpg', format='jpg', dpi=600)
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Defining function for PB Regression
+
+def passing_bablok(method1, method2):
+    """Perform Passing-Bablok analysis."""
+    #
+    # Calculate the gradients of the lines between each pair of points
+    #
+    n_points = len(method1)
+    # sv is a list of the gradients between of each pair of points
+    sv = []
+    # k is the number of gradients less than -1
+    k = 0
+    for i in range(n_points - 1):
+        for j in range(i + 1, n_points):
+            dy = method2[j] - method2[i]
+            dx = method1[j] - method1[i]
+            # Ignore gradients that are vertical (ie the x values of the points
+            # are the same)
+            if dx != 0:
+                gradient = dy / dx
+            elif dy < 0:
+                gradient = -1.e+23
+            elif dy > 0:
+                gradient = 1.e+23
+            else:
+                gradient = None
+            if gradient is not None:
+                sv.append(gradient)
+                k += (gradient < -1)
+    # Sort the gradients into ascending order
+    sv.sort()
+
+    #
+    # Find the estimated gradient and confidence limits
+    #
+    m0 = (len(sv) - 1) / 2
+    if m0 == int(m0):
+        # If odd
+        gradient_est = sv[k + int(m0)]
+    else:
+        # If even
+        gradient_est = 0.5 * (sv[k + int(m0 - 0.5)] + sv[k + int(m0 + 0.5)])
+    # Calculate the index of the upper and lower confidence bounds
+    w = 1.96
+    ci = w * math.sqrt((n_points * (n_points - 1) * (2 * n_points + 5)) / 18)
+    n_gradients = len(sv)
+    m1 = int(round((n_gradients - ci) / 2))
+    m2 = n_gradients - m1 - 1
+    # Calculate the lower and upper bounds of the gradient
+    (gradient_lb, gradient_ub) = (sv[k + m1], sv[k + m2])
+
+    def calc_intercept(method1, method2, gradient):
+        """Calculate intercept given points and a gradient."""
+        temp = []
+        for i in range(len(method1)):
+            temp.append(method2[i] - gradient * method1[i])
+        return np.median(temp)
+
+    # Calculate the intercept as the median of all the intercepts of all the
+    # lines connecting each pair of points
+    int_est = calc_intercept(method1, method2, gradient_est)
+    int_ub = calc_intercept(method1, method2, gradient_lb)
+    int_lb = calc_intercept(method1, method2, gradient_ub)
+
+    return (gradient_est, gradient_lb, gradient_ub), (int_est, int_lb, int_ub)
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 2
+data = df[df['Group'] == 1]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Pre-Grad'].to_numpy().flatten()
+method2 = data['echo_pre_MG'].to_numpy().flatten()
+
+# Perform Passing-Bablok regression
+beta, alpha = passing_bablok(method1, method2)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 10))  # Width of 10 inches and height of 2.5 inches
+ax.set_title('Passing-Bablok Regression: Pre TAVR Transvalvular Aortic Mean gradient- LFLG')
+ax.set_xlabel('Pre TAVR Transvalvular Aortic Mean gradient- Invasive')
+ax.set_ylabel('Pre TAVR Transvalvular Aortic Mean gradient- ECHO')
+
+# Scatter plot
+ax.scatter(method1, method2, c='k', s=60, alpha=0.6, marker='o')
+
+# Determine the range for the reference line
+combined_range = np.concatenate((method1, method2))
+min_val = np.min(combined_range)
+max_val = np.max(combined_range)
+
+# Reference line
+label = 'Reference line'
+ax.plot([min_val, max_val], [min_val, max_val], c='grey', ls='--', label=label)
+
+# Passing-Bablok regression line
+x = np.array([min_val, max_val])
+y = beta[0] * x + alpha[0]
+ax.plot(x, y, label=f'{beta[0]:.2f}x + {alpha[0]:.2f}')
+
+# Passing-Bablok regression line - confidence intervals
+y_lb = beta[1] * x + alpha[1]
+y_ub = beta[2] * x + alpha[2]
+ax.plot(x, y_ub, c='tab:blue', alpha=0.2, label=f'Upper CI: {beta[2]:.2f}x + {alpha[2]:.2f}')
+ax.plot(x, y_lb, c='tab:blue', alpha=0.2, label=f'Lower CI: {beta[1]:.2f}x + {alpha[1]:.2f}')
+ax.fill_between(x, y_ub, y_lb, alpha=0.2)
+
+# Change axis limits to fit the data and reference line
+ax.set_xlim(min_val, max_val)
+ax.set_ylim(min_val, max_val)
+
+# Legend
+ax.legend(frameon=False)
+
+# Show
+plt.show()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/PB_plot_3.jpg', format='jpg', dpi=600)
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Defining function for PB Regression
+
+def passing_bablok(method1, method2):
+    """Perform Passing-Bablok analysis."""
+    #
+    # Calculate the gradients of the lines between each pair of points
+    #
+    n_points = len(method1)
+    # sv is a list of the gradients between of each pair of points
+    sv = []
+    # k is the number of gradients less than -1
+    k = 0
+    for i in range(n_points - 1):
+        for j in range(i + 1, n_points):
+            dy = method2[j] - method2[i]
+            dx = method1[j] - method1[i]
+            # Ignore gradients that are vertical (ie the x values of the points
+            # are the same)
+            if dx != 0:
+                gradient = dy / dx
+            elif dy < 0:
+                gradient = -1.e+23
+            elif dy > 0:
+                gradient = 1.e+23
+            else:
+                gradient = None
+            if gradient is not None:
+                sv.append(gradient)
+                k += (gradient < -1)
+    # Sort the gradients into ascending order
+    sv.sort()
+
+    #
+    # Find the estimated gradient and confidence limits
+    #
+    m0 = (len(sv) - 1) / 2
+    if m0 == int(m0):
+        # If odd
+        gradient_est = sv[k + int(m0)]
+    else:
+        # If even
+        gradient_est = 0.5 * (sv[k + int(m0 - 0.5)] + sv[k + int(m0 + 0.5)])
+    # Calculate the index of the upper and lower confidence bounds
+    w = 1.96
+    ci = w * math.sqrt((n_points * (n_points - 1) * (2 * n_points + 5)) / 18)
+    n_gradients = len(sv)
+    m1 = int(round((n_gradients - ci) / 2))
+    m2 = n_gradients - m1 - 1
+    # Calculate the lower and upper bounds of the gradient
+    (gradient_lb, gradient_ub) = (sv[k + m1], sv[k + m2])
+
+    def calc_intercept(method1, method2, gradient):
+        """Calculate intercept given points and a gradient."""
+        temp = []
+        for i in range(len(method1)):
+            temp.append(method2[i] - gradient * method1[i])
+        return np.median(temp)
+
+    # Calculate the intercept as the median of all the intercepts of all the
+    # lines connecting each pair of points
+    int_est = calc_intercept(method1, method2, gradient_est)
+    int_ub = calc_intercept(method1, method2, gradient_lb)
+    int_lb = calc_intercept(method1, method2, gradient_ub)
+
+    return (gradient_est, gradient_lb, gradient_ub), (int_est, int_lb, int_ub)
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 2
+data = df[df['Group'] == 2]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Pre-Grad'].to_numpy().flatten()
+method2 = data['echo_pre_MG'].to_numpy().flatten()
+
+# Perform Passing-Bablok regression
+beta, alpha = passing_bablok(method1, method2)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 10))  # Width of 10 inches and height of 2.5 inches
+ax.set_title('Passing-Bablok Regression: Pre TAVR Transvalvular Aortic Mean gradient- NFLG')
+ax.set_xlabel('Pre TAVR Transvalvular Aortic Mean gradient- Invasive')
+ax.set_ylabel('Pre TAVR Transvalvular Aortic Mean gradient- ECHO')
+
+# Scatter plot
+ax.scatter(method1, method2, c='k', s=60, alpha=0.6, marker='o')
+
+# Determine the range for the reference line
+combined_range = np.concatenate((method1, method2))
+min_val = np.min(combined_range)
+max_val = np.max(combined_range)
+
+# Reference line
+label = 'Reference line'
+ax.plot([min_val, max_val], [min_val, max_val], c='grey', ls='--', label=label)
+
+# Passing-Bablok regression line
+x = np.array([min_val, max_val])
+y = beta[0] * x + alpha[0]
+ax.plot(x, y, label=f'{beta[0]:.2f}x + {alpha[0]:.2f}')
+
+# Passing-Bablok regression line - confidence intervals
+y_lb = beta[1] * x + alpha[1]
+y_ub = beta[2] * x + alpha[2]
+ax.plot(x, y_ub, c='tab:blue', alpha=0.2, label=f'Upper CI: {beta[2]:.2f}x + {alpha[2]:.2f}')
+ax.plot(x, y_lb, c='tab:blue', alpha=0.2, label=f'Lower CI: {beta[1]:.2f}x + {alpha[1]:.2f}')
+ax.fill_between(x, y_ub, y_lb, alpha=0.2)
+
+# Change axis limits to fit the data and reference line
+ax.set_xlim(min_val, max_val)
+ax.set_ylim(min_val, max_val)
+
+# Legend
+ax.legend(frameon=False)
+
+# Show
+plt.show()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/PB_plot_4.jpg', format='jpg', dpi=600)
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Defining function for PB Regression
+
+def passing_bablok(method1, method2):
+    """Perform Passing-Bablok analysis."""
+    #
+    # Calculate the gradients of the lines between each pair of points
+    #
+    n_points = len(method1)
+    # sv is a list of the gradients between of each pair of points
+    sv = []
+    # k is the number of gradients less than -1
+    k = 0
+    for i in range(n_points - 1):
+        for j in range(i + 1, n_points):
+            dy = method2[j] - method2[i]
+            dx = method1[j] - method1[i]
+            # Ignore gradients that are vertical (ie the x values of the points
+            # are the same)
+            if dx != 0:
+                gradient = dy / dx
+            elif dy < 0:
+                gradient = -1.e+23
+            elif dy > 0:
+                gradient = 1.e+23
+            else:
+                gradient = None
+            if gradient is not None:
+                sv.append(gradient)
+                k += (gradient < -1)
+    # Sort the gradients into ascending order
+    sv.sort()
+
+    #
+    # Find the estimated gradient and confidence limits
+    #
+    m0 = (len(sv) - 1) / 2
+    if m0 == int(m0):
+        # If odd
+        gradient_est = sv[k + int(m0)]
+    else:
+        # If even
+        gradient_est = 0.5 * (sv[k + int(m0 - 0.5)] + sv[k + int(m0 + 0.5)])
+    # Calculate the index of the upper and lower confidence bounds
+    w = 1.96
+    ci = w * math.sqrt((n_points * (n_points - 1) * (2 * n_points + 5)) / 18)
+    n_gradients = len(sv)
+    m1 = int(round((n_gradients - ci) / 2))
+    m2 = n_gradients - m1 - 1
+    # Calculate the lower and upper bounds of the gradient
+    (gradient_lb, gradient_ub) = (sv[k + m1], sv[k + m2])
+
+    def calc_intercept(method1, method2, gradient):
+        """Calculate intercept given points and a gradient."""
+        temp = []
+        for i in range(len(method1)):
+            temp.append(method2[i] - gradient * method1[i])
+        return np.median(temp)
+
+    # Calculate the intercept as the median of all the intercepts of all the
+    # lines connecting each pair of points
+    int_est = calc_intercept(method1, method2, gradient_est)
+    int_ub = calc_intercept(method1, method2, gradient_lb)
+    int_lb = calc_intercept(method1, method2, gradient_ub)
+
+    return (gradient_est, gradient_lb, gradient_ub), (int_est, int_lb, int_ub)
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 2
+data = df[df['Group'] == 1]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Post-Grad'].to_numpy().flatten()
+method2 = data['echo_post_MG'].to_numpy().flatten()
+
+# Perform Passing-Bablok regression
+beta, alpha = passing_bablok(method1, method2)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 10))  # Width of 10 inches and height of 2.5 inches
+ax.set_title('Passing-Bablok Regression: Post TAVR Transvalvular Aortic Mean gradient- LFLG')
+ax.set_xlabel('Post TAVR Transvalvular Aortic Mean gradient- Invasive')
+ax.set_ylabel('Post TAVR Transvalvular Aortic Mean gradient- ECHO')
+
+# Scatter plot
+ax.scatter(method1, method2, c='k', s=60, alpha=0.6, marker='o')
+
+# Determine the range for the reference line
+combined_range = np.concatenate((method1, method2))
+min_val = np.min(combined_range)
+max_val = np.max(combined_range)
+
+# Reference line
+label = 'Reference line'
+ax.plot([min_val, max_val], [min_val, max_val], c='grey', ls='--', label=label)
+
+# Passing-Bablok regression line
+x = np.array([min_val, max_val])
+y = beta[0] * x + alpha[0]
+ax.plot(x, y, label=f'{beta[0]:.2f}x + {alpha[0]:.2f}')
+
+# Passing-Bablok regression line - confidence intervals
+y_lb = beta[1] * x + alpha[1]
+y_ub = beta[2] * x + alpha[2]
+ax.plot(x, y_ub, c='tab:blue', alpha=0.2, label=f'Upper CI: {beta[2]:.2f}x + {alpha[2]:.2f}')
+ax.plot(x, y_lb, c='tab:blue', alpha=0.2, label=f'Lower CI: {beta[1]:.2f}x + {alpha[1]:.2f}')
+ax.fill_between(x, y_ub, y_lb, alpha=0.2)
+
+# Change axis limits to fit the data and reference line
+ax.set_xlim(min_val, max_val)
+ax.set_ylim(min_val, max_val)
+
+# Legend
+ax.legend(frameon=False)
+
+# Show
+plt.show()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/PB_plot_5.jpg', format='jpg', dpi=600)
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Defining function for PB Regression
+
+def passing_bablok(method1, method2):
+    """Perform Passing-Bablok analysis."""
+    #
+    # Calculate the gradients of the lines between each pair of points
+    #
+    n_points = len(method1)
+    # sv is a list of the gradients between of each pair of points
+    sv = []
+    # k is the number of gradients less than -1
+    k = 0
+    for i in range(n_points - 1):
+        for j in range(i + 1, n_points):
+            dy = method2[j] - method2[i]
+            dx = method1[j] - method1[i]
+            # Ignore gradients that are vertical (ie the x values of the points
+            # are the same)
+            if dx != 0:
+                gradient = dy / dx
+            elif dy < 0:
+                gradient = -1.e+23
+            elif dy > 0:
+                gradient = 1.e+23
+            else:
+                gradient = None
+            if gradient is not None:
+                sv.append(gradient)
+                k += (gradient < -1)
+    # Sort the gradients into ascending order
+    sv.sort()
+
+    #
+    # Find the estimated gradient and confidence limits
+    #
+    m0 = (len(sv) - 1) / 2
+    if m0 == int(m0):
+        # If odd
+        gradient_est = sv[k + int(m0)]
+    else:
+        # If even
+        gradient_est = 0.5 * (sv[k + int(m0 - 0.5)] + sv[k + int(m0 + 0.5)])
+    # Calculate the index of the upper and lower confidence bounds
+    w = 1.96
+    ci = w * math.sqrt((n_points * (n_points - 1) * (2 * n_points + 5)) / 18)
+    n_gradients = len(sv)
+    m1 = int(round((n_gradients - ci) / 2))
+    m2 = n_gradients - m1 - 1
+    # Calculate the lower and upper bounds of the gradient
+    (gradient_lb, gradient_ub) = (sv[k + m1], sv[k + m2])
+
+    def calc_intercept(method1, method2, gradient):
+        """Calculate intercept given points and a gradient."""
+        temp = []
+        for i in range(len(method1)):
+            temp.append(method2[i] - gradient * method1[i])
+        return np.median(temp)
+
+    # Calculate the intercept as the median of all the intercepts of all the
+    # lines connecting each pair of points
+    int_est = calc_intercept(method1, method2, gradient_est)
+    int_ub = calc_intercept(method1, method2, gradient_lb)
+    int_lb = calc_intercept(method1, method2, gradient_ub)
+
+    return (gradient_est, gradient_lb, gradient_ub), (int_est, int_lb, int_ub)
+
+# Read the DATA from an Excel file
+np.random.seed(0)
+df = pd.read_excel('Z:/Shiva/Nikitha/final.xlsx')
+
+# Filter the dataframe for rows where 'Group' equals 2
+data = df[df['Group'] == 2]
+
+# Access the specific columns directly from the filtered dataframe
+method1 = data['inv_Post-Grad'].to_numpy().flatten()
+method2 = data['echo_post_MG'].to_numpy().flatten()
+
+# Perform Passing-Bablok regression
+beta, alpha = passing_bablok(method1, method2)
+
+# Plot
+fig, ax = plt.subplots(figsize=(10, 10))  # Width of 10 inches and height of 2.5 inches
+ax.set_title('Passing-Bablok Regression: Post TAVR Transvalvular Aortic Mean gradient- NFLG')
+ax.set_xlabel('Post TAVR Transvalvular Aortic Mean gradient- Invasive')
+ax.set_ylabel('Post TAVR Transvalvular Aortic Mean gradient- ECHO')
+
+# Scatter plot
+ax.scatter(method1, method2, c='k', s=60, alpha=0.6, marker='o')
+
+# Determine the range for the reference line
+combined_range = np.concatenate((method1, method2))
+min_val = np.min(combined_range)
+max_val = np.max(combined_range)
+
+# Reference line
+label = 'Reference line'
+ax.plot([min_val, max_val], [min_val, max_val], c='grey', ls='--', label=label)
+
+# Passing-Bablok regression line
+x = np.array([min_val, max_val])
+y = beta[0] * x + alpha[0]
+ax.plot(x, y, label=f'{beta[0]:.2f}x + {alpha[0]:.2f}')
+
+# Passing-Bablok regression line - confidence intervals
+y_lb = beta[1] * x + alpha[1]
+y_ub = beta[2] * x + alpha[2]
+ax.plot(x, y_ub, c='tab:blue', alpha=0.2, label=f'Upper CI: {beta[2]:.2f}x + {alpha[2]:.2f}')
+ax.plot(x, y_lb, c='tab:blue', alpha=0.2, label=f'Lower CI: {beta[1]:.2f}x + {alpha[1]:.2f}')
+ax.fill_between(x, y_ub, y_lb, alpha=0.2)
+
+# Change axis limits to fit the data and reference line
+ax.set_xlim(min_val, max_val)
+ax.set_ylim(min_val, max_val)
+
+# Legend
+ax.legend(frameon=False)
+
+# Show
+plt.show()
+
+# Save the plot as a JPG file to the specified location
+plt.savefig('Z:/Shiva/Nikitha/PB_plot_6.jpg', format='jpg', dpi=600)
+
+
